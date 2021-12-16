@@ -1,0 +1,29 @@
+header {
+    margin: 20px 5px 20px 5px;
+    text-align: center;
+    font-size: 40px;
+}
+
+#search-container {
+    display: flex;
+    justify-content: center;
+}
+
+#search-bar {
+    position: relative;
+    padding: 5px 10px;
+    border: none;
+    border-bottom: 1px solid #000;
+    outline: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+#search-icon {
+    position: absolute;
+    top: 88px;
+    right: 41.5%;
+    opacity: 30%;
+    height: 16px;
+    width: 16px;
+}
