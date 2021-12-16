@@ -20,10 +20,8 @@ header {
 }
 
 #search-icon {
-    position: absolute;
-    top: 88px;
-    right: 41.5%;
+    margin: 4px 3px 0px 0px;
     opacity: 30%;
-    height: 16px;
-    width: 16px;
+    height: 14px;
+    width: 14px;
 }
