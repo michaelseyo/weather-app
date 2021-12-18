@@ -1,17 +1,41 @@
-header {
-    margin: 20px 5px 20px 5px;
-    text-align: center;
-    font-size: 40px;
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+
+* {
+    font-family: 'Montserrat', sans-serif;
 }
 
-#search-container {
+.top-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    padding: 5px 15px;
+    box-sizing: border-box;
+    background-color:rgb(236, 106, 106);
+}
+
+.top-nav #title {
+    float: left;
+    font-weight: bold;
+    font-size: 45px;
+}
+
+.top-nav ul {
+    float: right;
     display: flex;
-    justify-content: center;
+    list-style: none;
+}
+
+.search-container {
+    display: flex;
+    padding: 10px;
 }
 
 #search-bar {
     position: relative;
+    margin-left: 10px;
     padding: 5px 10px;
+    background-color: transparent;
     border: none;
     border-bottom: 1px solid #000;
     outline: none;
@@ -24,4 +48,28 @@ header {
     opacity: 30%;
     height: 14px;
     width: 14px;
+}
+
+.unit-container {
+    display: flex;
+}
+
+button#metric, button#imperial {
+    border: none;
+    background-color: transparent;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button#metric.active, button#imperial.active {
+    background-color: indianred;
+}
+
+main {
+    padding-top: 100px;
+}
+
+main ul {
+    list-style: none;
 }
