@@ -1,5 +1,5 @@
 import { getUnit } from './unit'
-import { roundTemp, capitalizeEveryStart, capitalizeStart, convertFromUTC } from './helper'
+import { roundTemp, capitalizeEveryStart, capitalizeStart, convertFromUTC, nightOrDay } from './helper'
 
 function displayInfo(weatherAndLoc) {
     console.log(weatherAndLoc.data); 
@@ -41,11 +41,11 @@ function displayCurrent(data, utcOffset, location) {
         weatherDesc = document.querySelector("#weatherDesc-li");
         temperatureText = document.querySelector("#temperatureText-li");
     }
-
-    time.textContent = convertFromUTC(utcOffset);
+    const convertedTime = convertFromUTC(utcOffset);
+    time.textContent = convertedTime;
     locationText.textContent = capitalizeEveryStart(location);
     displaying = location;
-    weatherImg = displayWeatherImg(utcOffset, data.weather[0].description);
+    weatherImg = displayWeatherImg(convertedTime, data.weather[0].description);
     weatherDesc.textContent = capitalizeStart(data.weather[0].description);
     temperatureText.textContent = (unit == "metric") ? roundTemp(data.temp) + "°C" : roundTemp(data.temp) + "°F";
     weatherUl.appendChild(time);
@@ -56,7 +56,7 @@ function displayCurrent(data, utcOffset, location) {
 }
 
 // check for day/night & description
-function displayWeatherImg(utcOffset, description) {
+function displayWeatherImg(convertedTime, description) {
     switch (description) {
         
     }

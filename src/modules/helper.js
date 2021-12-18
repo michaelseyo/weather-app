@@ -16,7 +16,7 @@ function capitalizeStart(sentence) {
     return sentence.charAt(0).toUpperCase() + sentence.slice(1);
 }
 
-// converts from UTC time to local time
+// converts from UTC time to local time and cleans up the string 
 function convertFromUTC(utcOffset) {
     const utcTime = Date.now();
     const localTime = utcTime + utcOffset * 1000; 
@@ -39,6 +39,22 @@ function cleanString(str) {
     return result;
 }
 
+// pre-cond: takes in our cleanString output 
+// post-cond: return night or day
+function nightOrDay(convertedTime) {
+    const arr = convertedTime.split(" ");
+    const time = arr[4];
+    const hour = time.split(":")[0];
+    const signature = time.split(":")[1].slice(2);
+    let status;
+    if ((hour >= 7 && signature == "pm") || (hour <= 6 && signature == "am")) {
+        status = "night";
+    } else {
+        status = "day";
+    }
+    return status;
+}
+
 // pre-cond: takes in HH:MM:SS format 
 // post-cond: returns 12h format
 function convertTo12h(time) {
@@ -51,4 +67,4 @@ function convertTo12h(time) {
 }
 
 
-export { roundTemp, capitalizeEveryStart, capitalizeStart, convertFromUTC }
+export { roundTemp, capitalizeEveryStart, capitalizeStart, convertFromUTC, nightOrDay }
