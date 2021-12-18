@@ -1,5 +1,5 @@
 import { getUnit } from './unit'
-import { roundTemp, capitalizeEveryStart, capitalizeStart, convertFromUTC, nightOrDay } from './helper'
+import { roundTemp, capitalizeEveryStart, capitalizeStart, convertFromUTC, dayOrNight } from './helper'
 
 function displayInfo(weatherAndLoc) {
     console.log(weatherAndLoc.data); 
@@ -45,21 +45,48 @@ function displayCurrent(data, utcOffset, location) {
     time.textContent = convertedTime;
     locationText.textContent = capitalizeEveryStart(location);
     displaying = location;
-    weatherImg = displayWeatherImg(convertedTime, data.weather[0].description);
+    weatherImg.src = displayWeatherImg(convertedTime, data.weather[0].description);
     weatherDesc.textContent = capitalizeStart(data.weather[0].description);
     temperatureText.textContent = (unit == "metric") ? roundTemp(data.temp) + "°C" : roundTemp(data.temp) + "°F";
+    
     weatherUl.appendChild(time);
     weatherUl.appendChild(locationText);
+    weatherUl.appendChild(weatherImg);
     weatherUl.appendChild(weatherDesc);
     weatherUl.appendChild(temperatureText);
     infoContainer.appendChild(weatherUl);
 }
 
 // check for day/night & description
-function displayWeatherImg(convertedTime, description) {
-    switch (description) {
-        
-    }
+// returns the url for the img
+function displayWeatherImg(convertedTime, weatherDesc) {
+    const description = weatherDesc.toLowerCase();
+    const status = dayOrNight(convertedTime);
+    let pic;
+    if (description.includes("thunderstorm")) {
+        pic = "11d"; 
+    } else if (["drizzle", "shower rain"].includes(description)) {
+        pic = "09d";
+    } else if (description.includes("rain") && description != "freezing rain" 
+                && !description.includes("snow")) {
+        pic = (status == "day") ? "10d" : "10n";
+    } else if (description.includes("freezing rain") || description.includes("snow") 
+                || description.includes("sleet")) {
+        pic = "13d";
+    } else if (["mist", "smoke", "haze", "sand", "fog", "dust", "volcanic ash", "squails", "tornado"]
+                .includes(description)) {
+        pic = "50d";
+    } else if (description.includes("clear sky")) {
+        pic = (status == "day") ? "01d" : "01n";
+    } else if (description == "few clouds") {
+        pic = (status == "day") ? "02d" : "02n";
+    } else if (description == "scattered clouds") {
+        pic = (status == "day") ? "03d" : "03n";
+    } else if (["broken clouds", "overcast clouds"].includes(description)) {
+        pic = (status == "day") ? "04d" : "04n";
+    } 
+    const url = `http://openweathermap.org/img/wn/${pic}@2x.png`;
+    return url;
 }
 
 function changeUnitDisplay() {

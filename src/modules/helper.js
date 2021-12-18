@@ -41,7 +41,7 @@ function cleanString(str) {
 
 // pre-cond: takes in our cleanString output 
 // post-cond: return night or day
-function nightOrDay(convertedTime) {
+function dayOrNight(convertedTime) {
     const arr = convertedTime.split(" ");
     const time = arr[4];
     const hour = time.split(":")[0];
@@ -67,4 +67,4 @@ function convertTo12h(time) {
 }
 
 
-export { roundTemp, capitalizeEveryStart, capitalizeStart, convertFromUTC, nightOrDay }
+export { roundTemp, capitalizeEveryStart, capitalizeStart, convertFromUTC, dayOrNight }
