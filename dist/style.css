@@ -16,7 +16,6 @@
 
 .top-nav #title {
     float: left;
-    font-weight: bold;
     font-size: 40px;
 }
 
@@ -73,9 +72,18 @@ main {
 
 main ul {
     list-style: none;
-    padding: 0;
-}
-
-.current ul {
+    padding: 10px;
     text-align: center;
 }
+
+#hourly-header {
+    font-size: 16px;
+}
+
+/* horizontal scroll-bar */
+.hourly { 
+    display: flex;
+    overflow: auto;
+    white-space: nowrap;
+}
+
