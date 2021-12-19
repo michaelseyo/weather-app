@@ -1,18 +1,24 @@
 import { getUnit } from './unit'
-import { roundTemp, capitalizeEveryStart, capitalizeStart, convertFromUTC, dayOrNight } from './helper'
+import { roundTemp, capitalizeEveryStart, capitalizeStart, convertFromUTC, dayOrNight, sliceTime } from './helper'
 
+// flag so we don't re-create elements when it has already been created
+let displaying = null;
 function displayInfo(weatherAndLoc) {
     console.log(weatherAndLoc.data); 
     const location = weatherAndLoc.location;
     const currentData = weatherAndLoc.data.current;
+    const hourlyDataArray = weatherAndLoc.data.hourly;
     const utcOffset = weatherAndLoc.data.timezone_offset;
     displayCurrent(currentData, utcOffset, location);
+    for (let i = 1; i < 25; i++) {
+        displayHourly(hourlyDataArray[i], utcOffset, i);
+    }
+    displaying = location;
 }
 
-let displaying = null;
 function displayCurrent(data, utcOffset, location) {
     const unit = getUnit();
-    const infoContainer = document.querySelector(".info"); 
+    const currentContainer = document.querySelector(".current"); 
     let weatherUl;
     let time;
     let locationText;
@@ -22,29 +28,28 @@ function displayCurrent(data, utcOffset, location) {
 
     if (displaying == null) {
         weatherUl = document.createElement("ul");
-        weatherUl.id = "weather-ul";
+        weatherUl.id = "currWeather-ul";
         time = document.createElement("li");
-        time.id = "time-li";
+        time.id = "currTime-li";
         locationText = document.createElement("li");
-        locationText.id = "locationText-li";
+        locationText.id = "currLocationText-li";
         weatherImg = document.createElement("img");
-        weatherImg.id = "weather-img";
+        weatherImg.id = "currWeather-img";
         weatherDesc = document.createElement("li");
-        weatherDesc.id = "weatherDesc-li";
+        weatherDesc.id = "currWeatherDesc-li";
         temperatureText = document.createElement("li");
-        temperatureText.id = "temperatureText-li";
+        temperatureText.id = "currTemperatureText-li";
     } else {
-        weatherUl = document.querySelector("#weather-ul");
-        time = document.querySelector("#time-li");
-        locationText = document.querySelector("#locationText-li");
-        weatherImg = document.querySelector("#weather-img");
-        weatherDesc = document.querySelector("#weatherDesc-li");
-        temperatureText = document.querySelector("#temperatureText-li");
+        weatherUl = document.querySelector("#currWeather-ul");
+        time = document.querySelector("#currTime-li");
+        locationText = document.querySelector("#currLocationText-li");
+        weatherImg = document.querySelector("#currWeather-img");
+        weatherDesc = document.querySelector("#currWeatherDesc-li");
+        temperatureText = document.querySelector("#currTemperatureText-li");
     }
-    const convertedTime = convertFromUTC(utcOffset);
+    const convertedTime = convertFromUTC(utcOffset, data.dt);
     time.textContent = convertedTime;
     locationText.textContent = capitalizeEveryStart(location);
-    displaying = location;
     weatherImg.src = displayWeatherImg(convertedTime, data.weather[0].description);
     weatherDesc.textContent = capitalizeStart(data.weather[0].description);
     temperatureText.textContent = (unit == "metric") ? roundTemp(data.temp) + "°C" : roundTemp(data.temp) + "°F";
@@ -54,7 +59,49 @@ function displayCurrent(data, utcOffset, location) {
     weatherUl.appendChild(weatherImg);
     weatherUl.appendChild(weatherDesc);
     weatherUl.appendChild(temperatureText);
-    infoContainer.appendChild(weatherUl);
+    currentContainer.appendChild(weatherUl);
+}
+
+// pre-cond: function is iterated through the hourlyDataArray
+function displayHourly(data, utcOffset, hour) {
+    const unit = getUnit();
+    const hourlyContainer = document.querySelector(".hourly");
+    let weatherUl;
+    let time;
+    let weatherImg;
+    let weatherDesc;
+    let temperatureText;
+
+    if (displaying == null) {
+        weatherUl = document.createElement("ul");
+        weatherUl.id = `hour${hour}Weather-ul`;
+        time = document.createElement("li");
+        time.id = `hour${hour}Time-li`;
+        weatherImg = document.createElement("img");
+        weatherImg.id = `hour${hour}Weather-img`;
+        weatherDesc = document.createElement("li");
+        weatherDesc.id = `hour${hour}WeatherDesc-li`;
+        temperatureText = document.createElement("li");
+        temperatureText.id = `hour${hour}TemperatureText-li`;
+    } else {
+        weatherUl = document.querySelector(`#hour${hour}Weather-ul`);
+        time = document.querySelector(`#hour${hour}Time-li`);
+        weatherImg = document.querySelector(`#hour${hour}Weather-img`);
+        weatherDesc = document.querySelector(`#hour${hour}WeatherDesc-li`);
+        temperatureText = document.querySelector(`#hour${hour}TemperatureText-li`)
+    }
+    const convertedTime = convertFromUTC(utcOffset, data.dt);
+    const displayedHourlyTime = sliceTime(convertedTime);
+    time.textContent = displayedHourlyTime;
+    weatherImg.src = displayWeatherImg(convertedTime, data.weather[0].description);
+    weatherDesc.textContent = capitalizeStart(data.weather[0].description);
+    temperatureText.textContent = (unit == "metric") ? roundTemp(data.temp) + "°C" : roundTemp(data.temp) + "°F";
+
+    weatherUl.appendChild(time);
+    weatherUl.appendChild(weatherImg);
+    weatherUl.appendChild(weatherDesc);
+    weatherUl.appendChild(temperatureText);
+    hourlyContainer.appendChild(weatherUl);
 }
 
 // check for day/night & description

@@ -16,13 +16,21 @@ function capitalizeStart(sentence) {
     return sentence.charAt(0).toUpperCase() + sentence.slice(1);
 }
 
+// pre-cond: takes in utcOffset and dt from the api data
 // converts from UTC time to local time and cleans up the string 
-function convertFromUTC(utcOffset) {
-    const utcTime = Date.now();
+function convertFromUTC(utcOffset, dt) {
+    const utcTime = dt * 1000;
     const localTime = utcTime + utcOffset * 1000; 
     const localTimeStr = new Date(localTime).toUTCString();
     const result = cleanString(localTimeStr);
     return result;
+}
+
+// pre-cond: takes in the convertFromUTC format 
+// post-cond: gives only the time 
+function sliceTime(convertedFromUTC) {
+    const arr = convertedFromUTC.split(" ");
+    return (arr[4] == "0:00am") ? "12:00am" : arr[4];
 }
 
 // pre-cond: takes in UTCString 
@@ -56,7 +64,7 @@ function dayOrNight(convertedTime) {
 }
 
 // pre-cond: takes in HH:MM:SS format 
-// post-cond: returns 12h format
+// post-cond: returns h:MM
 function convertTo12h(time) {
     const arr = time.split(":");
     const hour = (arr[0] != '12') ? arr[0] % 12 : 12;
@@ -66,5 +74,4 @@ function convertTo12h(time) {
     return result;
 }
 
-
-export { roundTemp, capitalizeEveryStart, capitalizeStart, convertFromUTC, dayOrNight }
+export { roundTemp, capitalizeEveryStart, capitalizeStart, convertFromUTC, dayOrNight, sliceTime }
