@@ -92,8 +92,11 @@ main ul {
     width: 50px;
 }
 
-#hourly-header {
+#hourly-header, #daily-header {
     font-size: 20px;
+    margin-top: 20px;
+    padding: 10px;
+    background-color:rgb(236, 106, 106);
 }
 
 /* horizontal scroll-bar */
@@ -103,14 +106,10 @@ main ul {
     white-space: nowrap;
 }
 
-#daily-header {
-    font-size: 20px;
-    margin-top: 20px;
-}
-
 .daily ul {
     display: flex;
     align-items: center;
+    border-bottom: 1px solid grey;
 }
 
 .daily ul li {
