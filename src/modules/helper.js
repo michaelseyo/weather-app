@@ -81,5 +81,25 @@ function convertTo12h(time) {
     return result;
 }
 
+function convertTemp(element, desiredUnit) {
+    const text = element.textContent;
+    const temp = text.match(/\d+/)[0];
+    let convertedTemp;
+    if (desiredUnit == "metric") {
+        convertedTemp = fahrenheitToCelsius(temp);
+    } else {
+        convertedTemp = celsiusToFahrenheit(temp)
+    }
+    return convertedTemp;
+}
+
+function celsiusToFahrenheit(temp) {
+    return roundTemp(temp * 1.8 + 32);
+}
+
+function fahrenheitToCelsius(temp) {
+    return roundTemp((temp - 32) / 1.8);
+}
+
 export { roundTemp, capitalizeEveryStart, capitalizeStart, convertFromUTC, 
-            dayOrNight, sliceTime, sliceDate }
+            dayOrNight, sliceTime, sliceDate, convertTemp }

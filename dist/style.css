@@ -83,7 +83,7 @@ main ul {
     align-items: center;
 }
 
-.current #currTemperatureText-li {
+.current #currTempText-li {
     font-size: 50px;
 }
 

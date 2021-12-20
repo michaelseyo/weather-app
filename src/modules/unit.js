@@ -1,3 +1,5 @@
+import { changeAllUnitDisplay } from './display'
+
 function getUnit() {
     const metricBtn = document.querySelector("#metric");
     return (metricBtn.classList.contains("active")) ? "metric" : "imperial";
@@ -13,8 +15,10 @@ function initUnitBtn() {
         event.currentTarget.classList.add("active");
         if (activeBtn != event.currentTarget) {
             activeBtn.classList.remove("active");
+            activeBtn = event.currentTarget;
+            const unit = getUnit();
+            changeAllUnitDisplay(unit);
         } 
-        activeBtn = event.currentTarget;
     }));
 }
 

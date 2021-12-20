@@ -1,6 +1,6 @@
 import { getUnit } from './unit'
 import { roundTemp, capitalizeEveryStart, capitalizeStart, convertFromUTC, 
-        dayOrNight, sliceTime, sliceDate } from './helper'
+        dayOrNight, sliceTime, sliceDate, convertTemp } from './helper'
 
 // flag so we don't re-create elements when it has already been created
 let displaying = null;
@@ -30,7 +30,7 @@ function displayCurrent(data, utcOffset, location, unit) {
     let locationText;
     let weatherImg;
     let weatherDesc;
-    let temperatureText;
+    let tempText;
 
     let detailsUl;
     let feelsLikeTemp;
@@ -54,8 +54,8 @@ function displayCurrent(data, utcOffset, location, unit) {
         weatherImg.id = "currWeather-img";
         weatherDesc = document.createElement("li");
         weatherDesc.id = "currWeatherDesc-li";
-        temperatureText = document.createElement("li");
-        temperatureText.id = "currTemperatureText-li";
+        tempText = document.createElement("li");
+        tempText.id = "currTempText-li";
         feelsLikeTemp = document.createElement("li");
         feelsLikeTemp.id = "currFeelsLike-li";
 
@@ -85,7 +85,7 @@ function displayCurrent(data, utcOffset, location, unit) {
         locationText = document.querySelector("#currLocationText-li");
         weatherImg = document.querySelector("#currWeather-img");
         weatherDesc = document.querySelector("#currWeatherDesc-li");
-        temperatureText = document.querySelector("#currTemperatureText-li");
+        tempText = document.querySelector("#currTempText-li");
         feelsLikeTemp = document.querySelector("#currFeelsLike-li");
 
         detailsUl = document.querySelector("#currWeatherDetails-ul");
@@ -103,7 +103,7 @@ function displayCurrent(data, utcOffset, location, unit) {
     locationText.textContent = capitalizeEveryStart(location);
     weatherImg.src = displayWeatherImg(convertedTime, data.weather[0].description);
     weatherDesc.textContent = capitalizeStart(data.weather[0].description);
-    temperatureText.textContent = (unit == "metric") ? roundTemp(data.temp) + "°C" : roundTemp(data.temp) + "°F";
+    tempText.textContent = (unit == "metric") ? roundTemp(data.temp) + "°C" : roundTemp(data.temp) + "°F";
     const feelsTemp = (unit == "metric") ? roundTemp(data.feels_like) + "°C" : roundTemp(data.feels_like) + "°F";
     feelsLikeTemp.textContent = `Feels like: ${feelsTemp}`;
     
@@ -113,14 +113,14 @@ function displayCurrent(data, utcOffset, location, unit) {
     sunriseImg.src = "https://cdn.icon-icons.com/icons2/1370/PNG/512/if-weather-27-2682824_90788.png";
     sunset.textContent = sliceTime(convertFromUTC(utcOffset, data.sunset));
     sunsetImg.src = "https://cdn.icon-icons.com/icons2/1370/PNG/512/if-weather-26-2682825_90789.png";
-    windspeed.textContent = `Wind speed: ${data.wind_speed}`;
+    windspeed.textContent = `Wind speed: ${data.wind_speed}m/s`;
     windImg.src = "https://cdn.icon-icons.com/icons2/571/PNG/512/wind-weather-lines-group-symbol_icon-icons.com_54629.png";
 
     mainUl.appendChild(time);
     mainUl.appendChild(locationText);
     mainUl.appendChild(weatherImg);
     mainUl.appendChild(weatherDesc);
-    mainUl.appendChild(temperatureText);
+    mainUl.appendChild(tempText);
     mainUl.appendChild(feelsLikeTemp);
     currentContainer.appendChild(mainUl);
 
@@ -143,7 +143,7 @@ function displayInterval(data, utcOffset, time, unit, type) {
     let weatherImg;
     let weatherDesc;
     // hourly
-    let temperatureText; 
+    let hourlyTempText; 
     // daily
     let minTempText;
     let maxTempText;
@@ -161,13 +161,13 @@ function displayInterval(data, utcOffset, time, unit, type) {
         weatherDesc = document.createElement("li");
         weatherDesc.id = `${type}${time}WeatherDesc-li`;
         if (type == "hour") {
-            temperatureText = document.createElement("li");
-            temperatureText.id = `${type}${time}TemperatureText-li`;
+            hourlyTempText = document.createElement("li");
+            hourlyTempText.id = `${type}${time}TempText-li`;
         } else {
             minTempText = document.createElement("li");
-            minTempText.id = `${type}${time}minTempText-li`;
+            minTempText.id = `${type}${time}MinTempText-li`;
             maxTempText = document.createElement("li");
-            maxTempText.id = `${type}${time}maxTempText-li`;
+            maxTempText.id = `${type}${time}MaxTempText-li`;
         }
     } else {
         weatherUl = document.querySelector(`#${type}${time}Weather-ul`);
@@ -175,10 +175,10 @@ function displayInterval(data, utcOffset, time, unit, type) {
         weatherImg = document.querySelector(`#${type}${time}Weather-img`);
         weatherDesc = document.querySelector(`#${type}${time}WeatherDesc-li`);
         if (type == "hour") {
-            temperatureText = document.querySelector(`#${type}${time}TemperatureText-li`);
+            hourlyTempText = document.querySelector(`#${type}${time}TempText-li`);
         } else {
-            minTempText = document.querySelector(`#${type}${time}minTempText-li`);
-            maxTempText = document.querySelector(`#${type}${time}maxTempText-li`);
+            minTempText = document.querySelector(`#${type}${time}MinTempText-li`);
+            maxTempText = document.querySelector(`#${type}${time}MaxTempText-li`);
         }
     }
 
@@ -189,7 +189,7 @@ function displayInterval(data, utcOffset, time, unit, type) {
     if (type == "hour") {
         const displayedTime = sliceTime(convertedTime);
         timeText.textContent = displayedTime;
-        temperatureText.textContent = (unit == "metric") ? roundTemp(data.temp) + "°C" 
+        hourlyTempText.textContent = (unit == "metric") ? roundTemp(data.temp) + "°C" 
                                                             : roundTemp(data.temp) + "°F";
     } else {
         const displayedTime = sliceDate(convertedTime);
@@ -204,7 +204,7 @@ function displayInterval(data, utcOffset, time, unit, type) {
     weatherUl.appendChild(weatherImg);
     weatherUl.appendChild(weatherDesc);
     if (type == "hour") {
-        weatherUl.appendChild(temperatureText);
+        weatherUl.appendChild(hourlyTempText);
     } else {
         weatherUl.appendChild(minTempText);
         weatherUl.appendChild(maxTempText);
@@ -244,9 +244,27 @@ function displayWeatherImg(convertedTime, weatherDesc, type) {
     return url;
 }
 
-function changeUnitDisplay() {
+function changeAllUnitDisplay(unit) {
+    const currTempText = document.querySelector("#currTempText-li");
+    changeElementUnitDisplay(currTempText, unit);
+    const currFeelsLikeText = document.querySelector("#currFeelsLike-li");
+    changeElementUnitDisplay(currFeelsLikeText, unit);
 
+    for (let hour = 1; hour < 25; hour++) {
+        const hourText = document.querySelector(`#hour${hour}TempText-li`);
+        changeElementUnitDisplay(hourText, unit);
+    }
+    for (let day = 1; day < 8; day++) {
+        const dayMinText = document.querySelector(`#day${day}MinTempText-li`);
+        changeElementUnitDisplay(dayMinText, unit);
+        const dayMaxText = document.querySelector(`#day${day}MaxTempText-li`);
+        changeElementUnitDisplay(dayMaxText, unit);
+    }
 }
 
+function changeElementUnitDisplay(element, unit) {
+    const convertedTemp = convertTemp(element, unit);
+    element.textContent = (unit == "metric") ? convertedTemp + "°C" : convertedTemp + "°F";
+}
 
-export default displayInfo
+export { displayInfo, changeAllUnitDisplay } 
