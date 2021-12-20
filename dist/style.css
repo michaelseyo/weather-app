@@ -9,26 +9,67 @@
     top: 0;
     left: 0;
     width: 100vw;
+    height: 70px;
     padding: 5px 15px;
     box-sizing: border-box;
     background-color:rgb(236, 106, 106);
 }
 
 .top-nav #title {
-    float: left;
     font-size: 40px;
+    line-height: 60px;
 }
 
-.top-nav ul {
-    float: right;
+.top-nav .menu {
     display: flex;
+    align-items: center;
+    float: right;
     list-style: none;
-    margin: 5px;
+    padding: 0px;
+    margin: 10px 0px 0px 0px;
+    line-height: 60px;
+}
+
+label {
+    display: none;
+    float: right;
+    font-size: 24px;
+    margin-right: 20px;
+    line-height: 60px;
+}
+
+#toggle {
+    display: none;
+}
+
+@media screen and (max-width: 600px) {
+    .top-nav .menu {
+        display: none;   
+    }
+
+    .top-nav .menu li {
+        display: block;
+    }
+
+    label {
+        display: block;
+        cursor: pointer;
+    }
+
+    #toggle:checked + .menu {
+        display: flex;
+        justify-content: center;
+        top: 60px;
+        left: 0;
+        position: fixed;
+        width: 100vw;
+        background-color: rgb(255, 196, 196);
+    }
 }
 
 .search-container {
     display: flex;
-    padding: 10px;
+    padding-right: 10px;
 }
 
 #search-bar {
@@ -37,7 +78,7 @@
     padding: 5px 10px;
     background-color: transparent;
     border: none;
-    border-bottom: 1px solid #000;
+    border-bottom: 1px solid rgb(168, 168, 168);
     outline: none;
     -webkit-box-shadow: none;
     box-shadow: none;
@@ -63,7 +104,7 @@ button#metric, button#imperial {
 }
 
 button#metric.active, button#imperial.active {
-    background-color: indianred;
+    background-color: rgb(190, 80, 80);
 }
 
 main {
@@ -87,7 +128,7 @@ main ul {
     font-size: 50px;
 }
 
-.current #currSunrise-img, #currSunset-img, #currWind-img {
+.current #currentWeather-img, .current #currSunrise-img, #currSunset-img, #currWind-img {
     height: 50px;
     width: 50px;
 }
@@ -109,7 +150,7 @@ main ul {
 .daily ul {
     display: flex;
     align-items: center;
-    border-bottom: 1px solid grey;
+    border-bottom: 1px solid #EAEAEB;
 }
 
 .daily ul li {
