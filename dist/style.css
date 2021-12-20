@@ -10,7 +10,7 @@
     left: 0;
     width: 100vw;
     height: 70px;
-    padding: 5px 15px;
+    padding: 5px 20px;
     box-sizing: border-box;
     background-color:rgb(236, 106, 106);
 }
@@ -63,6 +63,7 @@ label {
         left: 0;
         position: fixed;
         width: 100vw;
+        height: 50px;
         background-color: rgb(255, 196, 196);
     }
 }
@@ -105,6 +106,7 @@ button#metric, button#imperial {
 
 button#metric.active, button#imperial.active {
     background-color: rgb(190, 80, 80);
+    border-radius: 5px;
 }
 
 main {
