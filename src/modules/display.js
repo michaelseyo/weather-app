@@ -25,16 +25,27 @@ function displayInfo(weatherAndLoc) {
 
 function displayCurrent(data, utcOffset, location, unit) {
     const currentContainer = document.querySelector(".current"); 
-    let weatherUl;
+    let mainUl;
     let time;
     let locationText;
     let weatherImg;
     let weatherDesc;
     let temperatureText;
 
+    let detailsUl;
+    let feelsLikeTemp;
+    let humidity;
+    let pressure;
+    let sunrise;
+    let sunriseImg;
+    let sunset;
+    let sunsetImg;
+    let windspeed;
+    let windImg;
+
     if (displaying == null) {
-        weatherUl = document.createElement("ul");
-        weatherUl.id = "currWeather-ul";
+        mainUl = document.createElement("ul");
+        mainUl.id = "currWeather-ul";
         time = document.createElement("li");
         time.id = "currTime-li";
         locationText = document.createElement("li");
@@ -45,13 +56,47 @@ function displayCurrent(data, utcOffset, location, unit) {
         weatherDesc.id = "currWeatherDesc-li";
         temperatureText = document.createElement("li");
         temperatureText.id = "currTemperatureText-li";
+        feelsLikeTemp = document.createElement("li");
+        feelsLikeTemp.id = "currFeelsLike-li";
+
+        detailsUl = document.createElement("ul");
+        detailsUl.id = "currWeatherDetails-ul";
+        humidity = document.createElement("li");
+        humidity.id = "currHumidity-li";
+        pressure = document.createElement("li");
+        pressure.id = "currPressure-li";
+        sunrise = document.createElement("li");
+        sunrise.id = "currSunrise-li";
+        sunriseImg = document.createElement("img");
+        sunriseImg.id = "currSunrise-img";
+        sunset = document.createElement("li");
+        sunset.id = "currSunset-li";
+        sunsetImg = document.createElement("img");
+        sunsetImg.id = "currSunset-img";
+        windspeed = document.createElement("li");
+        windspeed.id = "currWindspeed-li";
+        windImg = document.createElement("img");
+        windImg.id = "currWind-img";
+
     } else {
-        weatherUl = document.querySelector("#currWeather-ul");
+        mainUl = document.querySelector("#currWeather-ul");
+        detailsUl = document.querySelector("#currWeatherDetails-ul");
         time = document.querySelector("#currTime-li");
         locationText = document.querySelector("#currLocationText-li");
         weatherImg = document.querySelector("#currWeather-img");
         weatherDesc = document.querySelector("#currWeatherDesc-li");
         temperatureText = document.querySelector("#currTemperatureText-li");
+        feelsLikeTemp = document.querySelector("#currFeelsLike-li");
+
+        detailsUl = document.querySelector("#currWeatherDetails-ul");
+        humidity = document.querySelector("#currHumidity-li");
+        pressure = document.querySelector("#currPressure-li");
+        sunrise = document.querySelector("#currSunrise-li");
+        sunriseImg = document.querySelector("#currSunrise-img");
+        sunset = document.querySelector("#currSunset-li");
+        sunsetImg = document.querySelector("#currSunset-img");
+        windspeed = document.querySelector("#currWindspeed-li");
+        windImg = document.querySelector("#currWind-img")
     }
     const convertedTime = convertFromUTC(utcOffset, data.dt);
     time.textContent = convertedTime;
@@ -59,13 +104,35 @@ function displayCurrent(data, utcOffset, location, unit) {
     weatherImg.src = displayWeatherImg(convertedTime, data.weather[0].description);
     weatherDesc.textContent = capitalizeStart(data.weather[0].description);
     temperatureText.textContent = (unit == "metric") ? roundTemp(data.temp) + "°C" : roundTemp(data.temp) + "°F";
+    const feelsTemp = (unit == "metric") ? roundTemp(data.feels_like) + "°C" : roundTemp(data.feels_like) + "°F";
+    feelsLikeTemp.textContent = `Feels like: ${feelsTemp}`;
     
-    weatherUl.appendChild(time);
-    weatherUl.appendChild(locationText);
-    weatherUl.appendChild(weatherImg);
-    weatherUl.appendChild(weatherDesc);
-    weatherUl.appendChild(temperatureText);
-    currentContainer.appendChild(weatherUl);
+    humidity.textContent = `Humidity: ${data.humidity}%`;
+    pressure.textContent = `Pressure: ${data.pressure}hPa`;
+    sunrise.textContent = sliceTime(convertFromUTC(utcOffset, data.sunrise));
+    sunriseImg.src = "https://cdn.icon-icons.com/icons2/1370/PNG/512/if-weather-27-2682824_90788.png";
+    sunset.textContent = sliceTime(convertFromUTC(utcOffset, data.sunset));
+    sunsetImg.src = "https://cdn.icon-icons.com/icons2/1370/PNG/512/if-weather-26-2682825_90789.png";
+    windspeed.textContent = `Wind speed: ${data.wind_speed}`;
+    windImg.src = "https://cdn.icon-icons.com/icons2/571/PNG/512/wind-weather-lines-group-symbol_icon-icons.com_54629.png";
+
+    mainUl.appendChild(time);
+    mainUl.appendChild(locationText);
+    mainUl.appendChild(weatherImg);
+    mainUl.appendChild(weatherDesc);
+    mainUl.appendChild(temperatureText);
+    mainUl.appendChild(feelsLikeTemp);
+    currentContainer.appendChild(mainUl);
+
+    detailsUl.appendChild(humidity);
+    detailsUl.appendChild(pressure);
+    detailsUl.appendChild(sunriseImg);
+    detailsUl.appendChild(sunrise);
+    detailsUl.appendChild(sunsetImg);
+    detailsUl.appendChild(sunset);
+    detailsUl.appendChild(windImg);
+    detailsUl.appendChild(windspeed);
+    currentContainer.appendChild(detailsUl);
 }
 
 // pre-cond: function is iterated through the hourlyDataArray
