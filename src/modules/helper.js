@@ -33,6 +33,13 @@ function sliceTime(convertedFromUTC) {
     return (arr[4] == "0:00am") ? "12:00am" : arr[4];
 }
 
+// pre-cond: takes in the convertFromUTC format 
+// post-cond: gives only the date
+function sliceDate(convertedFromUTC) {
+    const arr = convertedFromUTC.split(" ");
+    return arr.slice(0, 3).join(" ");
+}
+
 // pre-cond: takes in UTCString 
 // post-cond: returns in e.g Sat 18 Dec 2021 5:55pm
 function cleanString(str) {
@@ -74,4 +81,5 @@ function convertTo12h(time) {
     return result;
 }
 
-export { roundTemp, capitalizeEveryStart, capitalizeStart, convertFromUTC, dayOrNight, sliceTime }
+export { roundTemp, capitalizeEveryStart, capitalizeStart, convertFromUTC, 
+            dayOrNight, sliceTime, sliceDate }

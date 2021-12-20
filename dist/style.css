@@ -72,12 +72,13 @@ main {
 
 main ul {
     list-style: none;
+    margin: 0px;
     padding: 10px;
     text-align: center;
 }
 
 #hourly-header {
-    font-size: 16px;
+    font-size: 20px;
 }
 
 /* horizontal scroll-bar */
@@ -87,3 +88,16 @@ main ul {
     white-space: nowrap;
 }
 
+#daily-header {
+    font-size: 20px;
+    margin-top: 20px;
+}
+
+.daily ul {
+    display: flex;
+    align-items: center;
+}
+
+.daily ul li {
+    padding-left: 10px;
+}

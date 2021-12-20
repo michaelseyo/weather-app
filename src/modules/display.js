@@ -1,23 +1,29 @@
 import { getUnit } from './unit'
-import { roundTemp, capitalizeEveryStart, capitalizeStart, convertFromUTC, dayOrNight, sliceTime } from './helper'
+import { roundTemp, capitalizeEveryStart, capitalizeStart, convertFromUTC, 
+        dayOrNight, sliceTime, sliceDate } from './helper'
 
 // flag so we don't re-create elements when it has already been created
 let displaying = null;
+// pre-cond: takes in { data, location }
 function displayInfo(weatherAndLoc) {
+    const unit = getUnit();
     console.log(weatherAndLoc.data); 
     const location = weatherAndLoc.location;
     const currentData = weatherAndLoc.data.current;
     const hourlyDataArray = weatherAndLoc.data.hourly;
+    const dailyDataArray = weatherAndLoc.data.daily;
     const utcOffset = weatherAndLoc.data.timezone_offset;
-    displayCurrent(currentData, utcOffset, location);
-    for (let i = 1; i < 25; i++) {
-        displayHourly(hourlyDataArray[i], utcOffset, i);
+    displayCurrent(currentData, utcOffset, location, unit);
+    for (let hour = 1; hour < 25; hour++) {
+        displayInterval(hourlyDataArray[hour], utcOffset, hour, unit, "hour");
+    }
+    for (let day = 1; day < 8; day++) {
+        displayInterval(dailyDataArray[day], utcOffset, day, unit, "day");
     }
     displaying = location;
 }
 
-function displayCurrent(data, utcOffset, location) {
-    const unit = getUnit();
+function displayCurrent(data, utcOffset, location, unit) {
     const currentContainer = document.querySelector(".current"); 
     let weatherUl;
     let time;
@@ -63,52 +69,87 @@ function displayCurrent(data, utcOffset, location) {
 }
 
 // pre-cond: function is iterated through the hourlyDataArray
-function displayHourly(data, utcOffset, hour) {
-    const unit = getUnit();
-    const hourlyContainer = document.querySelector(".hourly");
+function displayInterval(data, utcOffset, time, unit, type) {
+    let intervalContainer;
     let weatherUl;
-    let time;
+    let timeText;
     let weatherImg;
     let weatherDesc;
-    let temperatureText;
+    // hourly
+    let temperatureText; 
+    // daily
+    let minTempText;
+    let maxTempText;
 
+    intervalContainer = (type == "hour") ? document.querySelector(".hourly") : document.querySelector(".daily");
+
+    // initialise elements
     if (displaying == null) {
         weatherUl = document.createElement("ul");
-        weatherUl.id = `hour${hour}Weather-ul`;
-        time = document.createElement("li");
-        time.id = `hour${hour}Time-li`;
+        weatherUl.id = `${type}${time}Weather-ul`;
+        timeText = document.createElement("li");
+        timeText.id = `${type}${time}Time-li`;
         weatherImg = document.createElement("img");
-        weatherImg.id = `hour${hour}Weather-img`;
+        weatherImg.id = `${type}${time}Weather-img`;
         weatherDesc = document.createElement("li");
-        weatherDesc.id = `hour${hour}WeatherDesc-li`;
-        temperatureText = document.createElement("li");
-        temperatureText.id = `hour${hour}TemperatureText-li`;
+        weatherDesc.id = `${type}${time}WeatherDesc-li`;
+        if (type == "hour") {
+            temperatureText = document.createElement("li");
+            temperatureText.id = `${type}${time}TemperatureText-li`;
+        } else {
+            minTempText = document.createElement("li");
+            minTempText.id = `${type}${time}minTempText-li`;
+            maxTempText = document.createElement("li");
+            maxTempText.id = `${type}${time}maxTempText-li`;
+        }
     } else {
-        weatherUl = document.querySelector(`#hour${hour}Weather-ul`);
-        time = document.querySelector(`#hour${hour}Time-li`);
-        weatherImg = document.querySelector(`#hour${hour}Weather-img`);
-        weatherDesc = document.querySelector(`#hour${hour}WeatherDesc-li`);
-        temperatureText = document.querySelector(`#hour${hour}TemperatureText-li`)
+        weatherUl = document.querySelector(`#${type}${time}Weather-ul`);
+        timeText = document.querySelector(`#${type}${time}Time-li`);
+        weatherImg = document.querySelector(`#${type}${time}Weather-img`);
+        weatherDesc = document.querySelector(`#${type}${time}WeatherDesc-li`);
+        if (type == "hour") {
+            temperatureText = document.querySelector(`#${type}${time}TemperatureText-li`);
+        } else {
+            minTempText = document.querySelector(`#${type}${time}minTempText-li`);
+            maxTempText = document.querySelector(`#${type}${time}maxTempText-li`);
+        }
     }
-    const convertedTime = convertFromUTC(utcOffset, data.dt);
-    const displayedHourlyTime = sliceTime(convertedTime);
-    time.textContent = displayedHourlyTime;
-    weatherImg.src = displayWeatherImg(convertedTime, data.weather[0].description);
-    weatherDesc.textContent = capitalizeStart(data.weather[0].description);
-    temperatureText.textContent = (unit == "metric") ? roundTemp(data.temp) + "°C" : roundTemp(data.temp) + "°F";
 
-    weatherUl.appendChild(time);
+    // edit elements
+    const convertedTime = convertFromUTC(utcOffset, data.dt);
+    weatherImg.src = displayWeatherImg(convertedTime, data.weather[0].description, type);
+    weatherDesc.textContent = capitalizeStart(data.weather[0].description);
+    if (type == "hour") {
+        const displayedTime = sliceTime(convertedTime);
+        timeText.textContent = displayedTime;
+        temperatureText.textContent = (unit == "metric") ? roundTemp(data.temp) + "°C" 
+                                                            : roundTemp(data.temp) + "°F";
+    } else {
+        const displayedTime = sliceDate(convertedTime);
+        timeText.textContent = displayedTime;
+        minTempText.textContent = (unit == "metric") ? "Min: " + roundTemp(data.temp.min) + "°C" 
+                                                        : "Min: " + roundTemp(data.temp.min) + "°F";
+        maxTempText.textContent = (unit == "metric") ? "Max: " + roundTemp(data.temp.max) + "°C" 
+                                                        : "Max: " + roundTemp(data.temp.max) + "°F";
+    }
+
+    weatherUl.appendChild(timeText);
     weatherUl.appendChild(weatherImg);
     weatherUl.appendChild(weatherDesc);
-    weatherUl.appendChild(temperatureText);
-    hourlyContainer.appendChild(weatherUl);
+    if (type == "hour") {
+        weatherUl.appendChild(temperatureText);
+    } else {
+        weatherUl.appendChild(minTempText);
+        weatherUl.appendChild(maxTempText);
+    }
+    intervalContainer.appendChild(weatherUl);
 }
 
 // check for day/night & description
 // returns the url for the img
-function displayWeatherImg(convertedTime, weatherDesc) {
+function displayWeatherImg(convertedTime, weatherDesc, type) {
     const description = weatherDesc.toLowerCase();
-    const status = dayOrNight(convertedTime);
+    const status = (type == "hour") ? dayOrNight(convertedTime) : "day";
     let pic;
     if (description.includes("thunderstorm")) {
         pic = "11d"; 
