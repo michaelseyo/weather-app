@@ -110,11 +110,11 @@ function displayCurrent(data, utcOffset, location, unit) {
     humidity.textContent = `Humidity: ${data.humidity}%`;
     pressure.textContent = `Pressure: ${data.pressure}hPa`;
     sunrise.textContent = sliceTime(convertFromUTC(utcOffset, data.sunrise));
-    sunriseImg.src = "https://cdn.icon-icons.com/icons2/1370/PNG/512/if-weather-27-2682824_90788.png";
+    sunriseImg.src = "./images/sunrise-img.png"
     sunset.textContent = sliceTime(convertFromUTC(utcOffset, data.sunset));
-    sunsetImg.src = "https://cdn.icon-icons.com/icons2/1370/PNG/512/if-weather-26-2682825_90789.png";
+    sunsetImg.src = "./images/sunset-img.png";
     windspeed.textContent = `Wind speed: ${data.wind_speed}m/s`;
-    windImg.src = "https://cdn.icon-icons.com/icons2/571/PNG/512/wind-weather-lines-group-symbol_icon-icons.com_54629.png";
+    windImg.src = "./images/wind-img.png";
 
     mainUl.appendChild(time);
     mainUl.appendChild(locationText);
