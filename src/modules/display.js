@@ -264,7 +264,14 @@ function changeAllUnitDisplay(unit) {
 
 function changeElementUnitDisplay(element, unit) {
     const convertedTemp = convertTemp(element, unit);
-    element.textContent = (unit == "metric") ? convertedTemp + "°C" : convertedTemp + "°F";
+    const convertedTempWithUnit = (unit == "metric") ? convertedTemp + "°C" : convertedTemp + "°F";
+    if (element.textContent.includes("Min")) {
+        element.textContent = `Min: ${convertedTempWithUnit}`;
+    } else if (element.textContent.includes("Max")) {
+        element.textContent = `Max: ${convertedTempWithUnit}`;
+    } else {
+        element.textContent = convertedTempWithUnit;
+    }
 }
 
 export { displayInfo, changeAllUnitDisplay } 
