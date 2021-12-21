@@ -146,13 +146,19 @@ main ul {
 .hourly { 
     display: flex;
     overflow: auto;
-    white-space: nowrap;
 }
 
 .daily ul {
     display: flex;
+    justify-content: center;
     align-items: center;
     border-bottom: 1px solid #EAEAEB;
+}
+
+@media screen and (max-width: 600px) {
+    .daily ul {
+        display: block;
+    }
 }
 
 .daily ul li {
