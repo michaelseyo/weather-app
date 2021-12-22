@@ -67,15 +67,15 @@ function displayCurrent(data, utcOffset, location, unit) {
         pressure.id = "currPressure-li";
         sunrise = document.createElement("li");
         sunrise.id = "currSunrise-li";
-        sunriseImg = document.createElement("img");
+        sunriseImg = new Image();
         sunriseImg.id = "currSunrise-img";
         sunset = document.createElement("li");
         sunset.id = "currSunset-li";
-        sunsetImg = document.createElement("img");
+        sunsetImg = new Image();
         sunsetImg.id = "currSunset-img";
         windspeed = document.createElement("li");
         windspeed.id = "currWindspeed-li";
-        windImg = document.createElement("img");
+        windImg = new Image();
         windImg.id = "currWind-img";
 
     } else {
