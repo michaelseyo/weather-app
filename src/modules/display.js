@@ -269,6 +269,8 @@ function changeElementUnitDisplay(element, unit) {
         element.textContent = `Min: ${convertedTempWithUnit}`;
     } else if (element.textContent.includes("Max")) {
         element.textContent = `Max: ${convertedTempWithUnit}`;
+    } else if (element.textContent.includes("Feels")) {
+        element.textContent = `Feels like: ${convertedTempWithUnit}`
     } else {
         element.textContent = convertedTempWithUnit;
     }
