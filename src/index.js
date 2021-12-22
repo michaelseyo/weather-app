@@ -1,4 +1,4 @@
-import { displayInfo }  from './modules/display'
+import { displayInfo, menuStyle }  from './modules/display'
 import initSearch from './modules/search'
 import { initUnitBtn, getUnit } from './modules/unit'
 

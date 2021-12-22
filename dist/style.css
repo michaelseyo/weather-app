@@ -2,6 +2,7 @@
 
 * {
     font-family: 'Montserrat', sans-serif;
+    user-select: none;
 }
 
 .top-nav {
@@ -28,6 +29,7 @@
     padding: 0px;
     margin: 10px 0px 0px 0px;
     line-height: 60px;
+    transition: all 3s ease;
 }
 
 label {
@@ -42,9 +44,19 @@ label {
     display: none;
 }
 
+
 @media screen and (max-width: 600px) {
     .top-nav .menu {
-        display: none;   
+        display: flex;
+        position: fixed;
+        justify-content: center;
+        top: 60px;
+        left: 0;
+        width: 100vw;
+        height: 0;
+        background-color: rgb(255, 196, 196);
+        overflow: hidden;
+        transition: .5s ease;
     }
 
     .top-nav .menu li {
@@ -56,15 +68,12 @@ label {
         cursor: pointer;
     }
 
+    label:hover {
+        color:rgb(60, 60, 60);
+    }
+
     #toggle:checked + .menu {
-        display: flex;
-        justify-content: center;
-        top: 60px;
-        left: 0;
-        position: fixed;
-        width: 100vw;
         height: 50px;
-        background-color: rgb(255, 196, 196);
     }
 }
 
@@ -124,6 +133,12 @@ main ul {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
+    width: 100vw;
+    max-width: 1400px;
+}
+
+.current #currLocationText-li {
+    font-size: 24px;
 }
 
 .current #currTempText-li {
@@ -135,10 +150,17 @@ main ul {
     width: 50px;
 }
 
+.center {
+    display: flex;
+    justify-content: center;
+}
+
 #hourly-header, #daily-header {
     font-size: 20px;
     margin-top: 20px;
     padding: 10px;
+    width: 100vw;
+    max-width: 1400px;
     background-color:rgb(236, 106, 106);
 }
 
@@ -146,6 +168,8 @@ main ul {
 .hourly { 
     display: flex;
     overflow: auto;
+    width: 100vw;
+    max-width: 1400px;
 }
 
 .daily ul {
