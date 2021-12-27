@@ -4,4 +4,4 @@ A responsive web-design weather app with current weather, 24-hour forecast and 7
 and find the details for the weather. You can also change the unit of temperature to either celsius or farenheit.
 The OpenWeatherMap API was used to get weather data. Created using HTML, CSS, Javascript, webpack and npm.
 
-https://michaelseyo.github.io/weather-app/
+Deployed Webapp: https://michaelseyo.github.io/weather-app/
